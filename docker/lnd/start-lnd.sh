@@ -66,6 +66,6 @@ exec lnd \
     "--$BACKEND.rpcpass"="$RPCPASS" \
     "--rpclisten=$HOSTNAME:10009" \
     "--rpclisten=localhost:10009" \
-    --debuglevel="$DEBUG" \
-    --tlsextraip 127.0.0.1 \
+    "--debuglevel"="$DEBUG" \
+    "--tlsextradomain"="lnd" \
     "$@"

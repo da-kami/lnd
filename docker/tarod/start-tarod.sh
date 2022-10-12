@@ -42,15 +42,10 @@ set_default() {
 DEBUG=$(set_default "$DEBUG" "debug")
 NETWORK=$(set_default "$NETWORK" "simnet")
 
-# CAUTION: DO NOT use the --noseedback for production/mainnet setups, ever!
-# Also, setting --rpclisten to $HOSTNAME will cause it to listen on an IP
-# address that is reachable on the internal network. If you do this outside of
-# docker, this might be a security concern!
-
 exec tarod \
     "--network"="$NETWORK" \
     "--debuglevel"="$DEBUG" \
-    "--lnd.host"="lnd:10009" \
+    "--lnd.host"="172.19.0.3:10009" \
     "--lnd.macaroonpath"="/root/.lnd/data/chain/bitcoin/$NETWORK/admin.macaroon" \
     "--lnd.tlspath"="/root/.lnd/tls.cert" \
     "$@"
