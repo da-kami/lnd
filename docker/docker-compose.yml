@@ -38,6 +38,20 @@ services:
       links:
         - "btcd:blockchain"
 
+    tarod:
+      image: tarod
+      container_name: tarod
+      build:
+        context: tarod/
+      environment:
+        - NETWORK
+        - DEBUG
+      volumes:
+        - lnd:/root/.lnd
+      entrypoint: [ "./start-tarod.sh" ]
+      links:
+        - "lnd:lnd"
+
 volumes:
   # shared volume is need to store the btcd rpc certificates and use it within
   # btcctl and lnd containers.
