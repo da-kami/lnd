@@ -24,6 +24,7 @@ RUN apk --no-cache add \
 
 # Copy the compiled binaries from the builder image.
 COPY --from=builder /go/bin/tarod /bin/
+COPY --from=builder /go/bin/tarocli /bin/
 
 COPY "start-tarod.sh" .
 
