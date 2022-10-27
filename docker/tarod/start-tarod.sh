@@ -39,33 +39,13 @@ set_default() {
 }
 
 # Set default variables if needed.
-RPCUSER=$(set_default "$RPCUSER" "devuser")
-RPCPASS=$(set_default "$RPCPASS" "devpass")
 DEBUG=$(set_default "$DEBUG" "debug")
 NETWORK=$(set_default "$NETWORK" "simnet")
-CHAIN=$(set_default "$CHAIN" "bitcoin")
-BACKEND="btcd"
-HOSTNAME=$(hostname)
-if [[ "$CHAIN" == "litecoin" ]]; then
-    BACKEND="ltcd"
-fi
 
-# CAUTION: DO NOT use the --noseedback for production/mainnet setups, ever!
-# Also, setting --rpclisten to $HOSTNAME will cause it to listen on an IP
-# address that is reachable on the internal network. If you do this outside of
-# docker, this might be a security concern!
-
-exec lnd \
-    --noseedbackup \
-    "--$CHAIN.active" \
-    "--$CHAIN.$NETWORK" \
-    "--$CHAIN.node"="$BACKEND" \
-    "--$BACKEND.rpccert"="/rpc/rpc.cert" \
-    "--$BACKEND.rpchost"="blockchain" \
-    "--$BACKEND.rpcuser"="$RPCUSER" \
-    "--$BACKEND.rpcpass"="$RPCPASS" \
-    "--rpclisten=$HOSTNAME:10009" \
-    "--rpclisten=localhost:10009" \
+exec tarod \
+    "--network"="$NETWORK" \
     "--debuglevel"="$DEBUG" \
-    "--tlsextradomain"="lnd" \
+    "--lnd.host"="172.19.0.3:10009" \
+    "--lnd.macaroonpath"="/root/.lnd/data/chain/bitcoin/$NETWORK/admin.macaroon" \
+    "--lnd.tlspath"="/root/.lnd/tls.cert" \
     "$@"
